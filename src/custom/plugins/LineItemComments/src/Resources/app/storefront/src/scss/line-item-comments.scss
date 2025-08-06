@@ -1,0 +1,168 @@
+// Line Item Comments Styling
+.line-item-comment-container {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 0.375rem;
+  border: 1px solid #dee2e6;
+
+  .form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #495057;
+
+    .text-danger {
+      color: #dc3545 !important;
+    }
+  }
+
+  .line-item-comment {
+    resize: vertical;
+    min-height: 80px;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+    &:focus {
+      border-color: #86b7fe;
+      outline: 0;
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    &.is-invalid {
+      border-color: #dc3545;
+
+      &:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+      }
+    }
+
+    &::placeholder {
+      color: #6c757d;
+      opacity: 1;
+    }
+  }
+
+  .invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #dc3545;
+  }
+
+  .is-invalid ~ .invalid-feedback {
+    display: block;
+  }
+}
+
+// Checkout Confirm Page Kommentare
+.checkout-confirm-item-comment {
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border-left: 3px solid #007bff;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+
+  strong {
+    color: #495057;
+  }
+}
+
+// Admin Bereich
+.sw-order-line-item-comment {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .comment-text {
+    font-size: 0.875rem;
+    color: #495057;
+    word-break: break-word;
+  }
+}
+
+// Validierungs-Container
+#line-item-comments-validation {
+  margin: 1rem 0;
+
+  .alert {
+    border-left: 4px solid #dc3545;
+
+    h6 {
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    ul {
+      margin-bottom: 0;
+      padding-left: 1.25rem;
+
+      li {
+        margin-bottom: 0.25rem;
+      }
+    }
+  }
+}
+
+// Mobile Responsiveness
+@media (max-width: 576px) {
+  .line-item-comment-container {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+
+    .line-item-comment {
+      min-height: 70px;
+      font-size: 0.8rem;
+    }
+  }
+
+  .checkout-confirm-item-comment {
+    padding: 0.375rem;
+    font-size: 0.8rem;
+  }
+}
+
+// Animationen
+.line-item-comment-container {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Fokus-Indikatoren für Barrierefreiheit
+.line-item-comment:focus-visible {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+// Print Styles
+@media print {
+  .line-item-comment-container {
+    background-color: transparent !important;
+    border: 1px solid #000 !important;
+
+    .line-item-comment {
+      border: none !important;
+      background-color: transparent !important;
+    }
+  }
+
+  .checkout-confirm-item-comment {
+    background-color: transparent !important;
+    border-left: 2px solid #000 !important;
+  }
+}

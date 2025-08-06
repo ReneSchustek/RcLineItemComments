@@ -1,0 +1,46 @@
+{% sw_extends '@Storefront/storefront/component/line-item/line-item.html.twig' %}
+
+{% block component_line_item %}
+    {% set lineItemComment = lineItem.payload.comment|default('') %}
+    {% set isCommentRequired = false %}
+
+    {{ parent() }}
+
+    {% if lineItem.type == 'product' %}
+        {# Prüfen ob für dieses Produkt Kommentare in einer der Kategorien erforderlich sind #}
+        {% if lineItem.payload.productEntity and lineItem.payload.productEntity.categories %}
+            {% for category in lineItem.payload.productEntity.categories %}
+                {% if category.customFields.line_item_comments_required is defined and category.customFields.line_item_comments_required == true %}
+                    {% set isCommentRequired = true %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% if isCommentRequired %}
+            <div class="line-item-comment-container mt-2" data-comment-required="true">
+                <div class="form-group">
+                    <label for="comment-{{ lineItem.id }}" class="form-label">
+                        {{ 'lineitemcomments.cart.comment_label'|trans }}
+                        <span class="text-danger">*</span>
+                    </label>
+                    <textarea
+                            id="comment-{{ lineItem.id }}"
+                            name="lineitem_comments[{{ lineItem.id }}]"
+                            class="form-control line-item-comment"
+                            data-line-item-id="{{ lineItem.id }}"
+                            data-product-id="{{ lineItem.referencedId }}"
+                            placeholder="{{ 'lineitemcomments.cart.comment_placeholder'|trans }}"
+                            rows="3"
+                            required
+                    >{{ lineItemComment }}</textarea>
+                    <div class="invalid-feedback" id="comment-error-{{ lineItem.id }}">
+                        {{ 'lineitemcomments.cart.comment_required'|trans }}
+                    </div>
+                    <small class="form-text text-muted">
+                        {{ 'lineitemcomments.cart.comment_help'|trans }}
+                    </small>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

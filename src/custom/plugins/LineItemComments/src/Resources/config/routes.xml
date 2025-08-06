@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing
+        http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="frontend.line-item.comment.save" path="/line-item/comment/save" methods="POST">
+        <default key="_controller">LineItemComments\Storefront\Controller\LineItemCommentController::saveComment</default>
+        <default key="_routeScope">storefront</default>
+        <default key="XmlHttpRequest">true</default>
+    </route>
+
+    <route id="frontend.line-item.comments.validate" path="/line-item/comments/validate" methods="POST">
+        <default key="_controller">LineItemComments\Storefront\Controller\LineItemCommentController::validateComments</default>
+        <default key="_routeScope">storefront</default>
+        <default key="XmlHttpRequest">true</default>
+    </route>
+
+    <route id="frontend.line-item.comment.get" path="/line-item/comment/get/{lineItemId}" methods="GET">
+        <default key="_controller">LineItemComments\Storefront\Controller\LineItemCommentController::getComment</default>
+        <default key="_routeScope">storefront</default>
+        <default key="XmlHttpRequest">true</default>
+    </route>
+
+</routes>

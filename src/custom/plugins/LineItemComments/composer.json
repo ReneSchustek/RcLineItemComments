@@ -1,0 +1,32 @@
+{
+  "name": "lineitemcomments/lineitemcomments",
+  "description": "Plugin to add mandatory comments to individual line items in cart",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Your Name",
+      "email": "your.email@example.com"
+    }
+  ],
+  "require": {
+    "shopware/core": "~6.7.0"
+  },
+  "extra": {
+    "shopware-plugin-class": "LineItemComments\\LineItemComments",
+    "label": {
+      "de-DE": "Artikel-Bemerkungen",
+      "en-GB": "Line Item Comments"
+    },
+    "description": {
+      "de-DE": "Ermöglicht Kunden, Pflicht-Bemerkungen zu einzelnen Artikeln hinzuzufügen",
+      "en-GB": "Allows customers to add mandatory comments to individual line items"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "LineItemComments\\": "src/"
+    }
+  }
+}

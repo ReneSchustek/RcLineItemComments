@@ -1,0 +1,25 @@
+{
+  "lineitemcomments": {
+    "cart": {
+      "comment_label": "Comment for this item",
+      "comment_placeholder": "Please enter your comment for this item here...",
+      "comment_required": "A comment is required",
+      "comment_help": "A comment is mandatory for items in this category",
+      "validation_title": "Missing Comments",
+      "validation_message": "Please add a comment to all marked items before proceeding."
+    },
+    "checkout": {
+      "missing_comments": "Please add a comment to all marked items.",
+      "validation_failed": "Comment validation failed."
+    },
+    "admin": {
+      "comment_label": "Customer Comment",
+      "no_comment": "No comment available",
+      "category_settings": {
+        "title": "Line Item Comments",
+        "require_comments": "Require comments for line items",
+        "require_comments_help": "When enabled, customers must leave a comment for all items in this category"
+      }
+    }
+  }
+}

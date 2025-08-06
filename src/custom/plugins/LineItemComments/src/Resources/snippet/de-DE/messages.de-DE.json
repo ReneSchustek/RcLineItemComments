@@ -1,0 +1,25 @@
+{
+  "lineitemcomments": {
+    "cart": {
+      "comment_label": "Bemerkung zu diesem Artikel",
+      "comment_placeholder": "Bitte geben Sie hier Ihre Bemerkung zu diesem Artikel ein...",
+      "comment_required": "Eine Bemerkung ist erforderlich",
+      "comment_help": "Für Artikel dieser Kategorie ist eine Bemerkung verpflichtend",
+      "validation_title": "Fehlende Bemerkungen",
+      "validation_message": "Bitte fügen Sie zu allen markierten Artikeln eine Bemerkung hinzu, bevor Sie fortfahren."
+    },
+    "checkout": {
+      "missing_comments": "Bitte fügen Sie zu allen markierten Artikeln eine Bemerkung hinzu.",
+      "validation_failed": "Die Validierung der Bemerkungen ist fehlgeschlagen."
+    },
+    "admin": {
+      "comment_label": "Kunden-Bemerkung",
+      "no_comment": "Keine Bemerkung vorhanden",
+      "category_settings": {
+        "title": "Artikel-Bemerkungen",
+        "require_comments": "Bemerkungen für Artikel erforderlich",
+        "require_comments_help": "Wenn aktiviert, müssen Kunden für alle Artikel dieser Kategorie eine Bemerkung hinterlassen"
+      }
+    }
+  }
+}

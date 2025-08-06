@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Entity Definition -->
+        <service id="LineItemComments\Core\Content\LineItemComment\LineItemCommentDefinition">
+            <tag name="shopware.entity.definition"/>
+        </service>
+
+        <!-- Checkout Subscriber -->
+        <service id="LineItemComments\Subscriber\CheckoutSubscriber">
+            <argument type="service" id="LineItemComments\Service\LineItemCommentService"/>
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="translator"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <!-- Cart Subscriber -->
+        <service id="LineItemComments\Subscriber\CartSubscriber">
+            <argument type="service" id="LineItemComments\Service\LineItemCommentService"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <!-- Line Item Comment Service -->
+        <service id="LineItemComments\Service\LineItemCommentService">
+            <argument type="service" id="line_item_comment.repository"/>
+            <argument type="service" id="Shopware\Core\System\SalesChannel\Context\SalesChannelContextService"/>
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <!-- Storefront Controller -->
+        <service id="LineItemComments\Storefront\Controller\LineItemCommentController" public="true">
+            <argument type="service" id="LineItemComments\Service\LineItemCommentService"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <!-- Order Placed Subscriber -->
+        <service id="LineItemComments\Subscriber\OrderPlacedSubscriber">
+            <argument type="service" id="LineItemComments\Service\LineItemCommentService"/>
+            <argument type="service" id="order_line_item.repository"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <!-- Order Line Item Extension -->
+        <service id="LineItemComments\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemExtension">
+            <tag name="shopware.entity.extension"/>
+        </service>
+    </services>
+</container>

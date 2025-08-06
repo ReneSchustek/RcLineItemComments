@@ -1,0 +1,116 @@
+{% sw_extends '@Storefront/storefront/page/checkout/cart/index.html.twig' %}
+
+{% block page_checkout_cart_add_promotion_input %}
+    {{ parent() }}
+
+    {# Validierungs-Container für Kommentare #}
+    <div id="line-item-comments-validation" class="d-none">
+        <div class="alert alert-danger" role="alert">
+            <h6>{{ 'lineitemcomments.cart.validation_title'|trans }}</h6>
+            <ul id="comment-validation-errors"></ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block base_script_token %}
+    {{ parent() }}
+
+    <script>
+        // Line Item Comments JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            const commentTextareas = document.querySelectorAll('.line-item-comment');
+            const checkoutButton = document.querySelector('.btn-buy');
+
+            // Auto-save Kommentare
+            commentTextareas.forEach(function(textarea) {
+                let timeout;
+                textarea.addEventListener('input', function() {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(function() {
+                        saveComment(textarea.dataset.lineItemId, textarea.value);
+                    }, 1000); // 1 Sekunde Delay
+                });
+            });
+
+            // Validierung vor Checkout
+            if (checkoutButton) {
+                checkoutButton.addEventListener('click', function(e) {
+                    if (!validateAllComments()) {
+                        e.preventDefault();
+                        showValidationErrors();
+                        return false;
+                    }
+                });
+            }
+
+            function saveComment(lineItemId, comment) {
+                fetch('{{ path('frontend.line-item.comment.save') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: `lineItemId=${lineItemId}&comment=${encodeURIComponent(comment)}`
+                });
+            }
+
+            function validateAllComments() {
+                let isValid = true;
+                const errors = [];
+
+                // Nur Textareas validieren, die als erforderlich markiert sind
+                const requiredCommentTextareas = document.querySelectorAll('.line-item-comment[data-comment-required="true"], .line-item-comment-container[data-comment-required="true"] .line-item-comment');
+
+                requiredCommentTextareas.forEach(function(textarea) {
+                    const comment = textarea.value.trim();
+                    const lineItemId = textarea.dataset.lineItemId;
+
+                    if (!comment) {
+                        isValid = false;
+                        textarea.classList.add('is-invalid');
+                        const errorDiv = document.getElementById(`comment-error-${lineItemId}`);
+                        if (errorDiv) {
+                            errorDiv.style.display = 'block';
+                        }
+                        const itemName = textarea.closest('.cart-item').querySelector('.line-item-label').textContent.trim();
+                        errors.push(`Artikel "${itemName}" benötigt eine Bemerkung`);
+                    } else {
+                        textarea.classList.remove('is-invalid');
+                        const errorDiv = document.getElementById(`comment-error-${lineItemId}`);
+                        if (errorDiv) {
+                            errorDiv.style.display = 'none';
+                        }
+                    }
+                });
+
+                return isValid;
+            }
+
+            function showValidationErrors() {
+                const validationContainer = document.getElementById('line-item-comments-validation');
+                const errorsList = document.getElementById('comment-validation-errors');
+
+                if (validationContainer && errorsList) {
+                    errorsList.innerHTML = '';
+
+                    const requiredCommentTextareas = document.querySelectorAll('.line-item-comment[data-comment-required="true"], .line-item-comment-container[data-comment-required="true"] .line-item-comment');
+
+                    requiredCommentTextareas.forEach(function(textarea) {
+                        const comment = textarea.value.trim();
+                        if (!comment) {
+                            const li = document.createElement('li');
+                            const itemName = textarea.closest('.cart-item').querySelector('.line-item-label').textContent.trim();
+                            li.textContent = `Artikel "${itemName}" benötigt eine Bemerkung (Kategorie-Anforderung)`;
+                            errorsList.appendChild(li);
+                        }
+                    });
+
+                    if (errorsList.children.length > 0) {
+                        validationContainer.classList.remove('d-none');
+                        validationContainer.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock %}

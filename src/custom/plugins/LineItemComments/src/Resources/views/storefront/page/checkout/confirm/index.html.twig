@@ -1,0 +1,73 @@
+{% sw_extends '@Storefront/storefront/page/checkout/confirm/index.html.twig' %}
+
+{% block page_checkout_confirm_tos %}
+    {# Finale Validierung der Kommentare vor Bestellung #}
+    {% set missingComments = [] %}
+    {% for lineItem in page.cart.lineItems %}
+        {% if lineItem.type == 'product' %}
+            {% set comment = lineItem.payload.comment|default('') %}
+            {% if comment|trim is empty %}
+                {% set missingComments = missingComments|merge([lineItem]) %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    {% if missingComments|length > 0 %}
+        <div class="alert alert-danger mb-4" role="alert">
+            <h6 class="alert-heading">{{ 'lineitemcomments.cart.validation_title'|trans }}</h6>
+            <p>{{ 'lineitemcomments.checkout.missing_comments'|trans }}</p>
+            <ul class="mb-0">
+                {% for item in missingComments %}
+                    <li>{{ item.label }}</li>
+                {% endfor %}
+            </ul>
+            <hr>
+            <a href="{{ path('frontend.checkout.cart.page') }}" class="btn btn-primary btn-sm">
+                {{ 'checkout.cartLinkText'|trans }}
+            </a>
+        </div>
+    {% endif %}
+
+    {{ parent() }}
+{% endblock %}
+
+{% block page_checkout_confirm_tos_control %}
+    {% set missingComments = [] %}
+    {% for lineItem in page.cart.lineItems %}
+        {% if lineItem.type == 'product' %}
+            {% set comment = lineItem.payload.comment|default('') %}
+            {% if comment|trim is empty %}
+                {% set missingComments = missingComments|merge([lineItem]) %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    {% if missingComments|length == 0 %}
+        {{ parent() }}
+    {% else %}
+        {# Submit-Button deaktivieren wenn Kommentare fehlen #}
+        <div class="checkout-confirm-tos-control">
+            <button type="submit"
+                    class="btn btn-primary btn-lg btn-block"
+                    disabled
+                    title="{{ 'lineitemcomments.checkout.missing_comments'|trans }}">
+                {{ 'checkout.confirmSubmit'|trans }}
+            </button>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block page_checkout_confirm_cart_item %}
+    {% set lineItemComment = lineItem.payload.comment|default('') %}
+
+    {{ parent() }}
+
+    {% if lineItem.type == 'product' and lineItemComment %}
+        <div class="checkout-confirm-item-comment mt-2">
+            <small class="text-muted">
+                <strong>{{ 'lineitemcomments.admin.comment_label'|trans }}:</strong><br>
+                {{ lineItemComment }}
+            </small>
+        </div>
+    {% endif %}
+{% endblock %}
